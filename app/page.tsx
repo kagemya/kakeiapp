@@ -1,31 +1,44 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import { BudgetGauge } from "@/components/molecules/BudgetGauge";
 import { ExpensePieChart } from "@/components/organisms/ExpensePieChart";
 import { aggregateByCategory } from "@/lib/aggregate";
-import { Category, Transaction } from "@/types";
+import { getCategories, getTransactions, getBudgets } from "@/lib/storage";
+import { Category, Transaction, Budget } from "@/types";
 
-// ---- ダミーデータ（動作確認用） ----
-const dummyCategories: Category[] = [
-  { id: "cat_food", userId: "local", name: "食費", type: "expense", color: "#639922" },
-  { id: "cat_food_veg", userId: "local", name: "野菜", type: "expense", color: "#97C459", parentCategoryId: "cat_food" },
-  { id: "cat_food_meat", userId: "local", name: "肉類", type: "expense", color: "#3B6D11", parentCategoryId: "cat_food" },
-  { id: "cat_daily", userId: "local", name: "生活用品", type: "expense", color: "#378ADD" },
-];
-
-const dummyTransactions: Transaction[] = [
-  { id: "t1", userId: "local", categoryId: "cat_food_veg", type: "expense", amount: 1200, date: "2026-08-01", createdAt: "2026-08-01T00:00:00Z" },
-  { id: "t2", userId: "local", categoryId: "cat_food_meat", type: "expense", amount: 2500, date: "2026-08-05", createdAt: "2026-08-05T00:00:00Z" },
-  { id: "t3", userId: "local", categoryId: "cat_daily", type: "expense", amount: 3000, date: "2026-08-10", createdAt: "2026-08-10T00:00:00Z" },
-];
+function getCurrentYearMonth(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
 
 export default function HomePage() {
-  const budgetAmount = 50000;
-  const spentAmount = dummyTransactions.reduce((sum, t) => sum + t.amount, 0);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [budgets, setBudgets] = useState<Budget[]>([]);
 
-  // ホーム画面用：大分類でまとめる
-  const pieData = aggregateByCategory(dummyTransactions, dummyCategories, {
+  useEffect(() => {
+    setCategories(getCategories());
+    setTransactions(getTransactions());
+    setBudgets(getBudgets());
+  }, []);
+
+  const currentYearMonth = getCurrentYearMonth();
+
+  // 今月の全体予算を探す（categoryId未設定＝全体予算）
+  const currentBudget = budgets.find(
+    (b) => b.periodType === "monthly" && b.periodKey === currentYearMonth && !b.categoryId
+  );
+  const budgetAmount = currentBudget?.amount ?? 0;
+
+  // 今月の支出だけを対象にする
+  const currentMonthTransactions = transactions.filter(
+    (t) => t.type === "expense" && t.date.startsWith(currentYearMonth)
+  );
+  const spentAmount = currentMonthTransactions.reduce((sum, t) => sum + t.amount, 0);
+
+  const pieData = aggregateByCategory(currentMonthTransactions, categories, {
     topLevelOnly: true,
   });
 
@@ -38,7 +51,11 @@ export default function HomePage() {
 
       <div style={{ marginTop: "32px" }}>
         <h2 style={{ fontSize: "16px", marginBottom: "8px" }}>支出内訳</h2>
-        <ExpensePieChart data={pieData} />
+        {currentMonthTransactions.length === 0 ? (
+          <p style={{ fontSize: "14px", color: "#666" }}>今月の支出データがありません</p>
+        ) : (
+          <ExpensePieChart data={pieData} />
+        )}
       </div>
     </main>
   );
