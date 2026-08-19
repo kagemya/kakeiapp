@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addBudget } from "@/lib/storage";
+import { upsertBudget } from "@/lib/storage";
 import { Budget } from "@/types";
 
 function getCurrentYearMonth(): string {
@@ -36,7 +36,7 @@ export function BudgetForm() {
       amount: amountNumber,
     };
 
-    addBudget(newBudget);
+    upsertBudget(newBudget);
     router.push("/"); // ホーム画面に戻る
   };
 

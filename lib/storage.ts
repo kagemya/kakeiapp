@@ -98,6 +98,24 @@ export function addBudget(budget: Budget): void {
   saveAppData(data);
 }
 
+export function upsertBudget(budget: Budget): void {
+  const data = getAppData();
+  const existingIndex = data.budgets.findIndex(
+    (b) =>
+      b.periodType === budget.periodType &&
+      b.periodKey === budget.periodKey &&
+      b.categoryId === budget.categoryId // 全体予算同士は categoryId が両方 undefined で一致する
+  );
+
+  if (existingIndex !== -1) {
+    data.budgets[existingIndex] = budget; // 既存を上書き
+  } else {
+    data.budgets.push(budget); // 新規追加
+  }
+
+  saveAppData(data);
+}
+
 // ---- CalendarEvent ----
 
 export function getCalendarEvents(): CalendarEvent[] {
