@@ -1,6 +1,7 @@
 
 "use client";
 
+import styles from "@/components/organisms/BudgetForm/BudgetForm.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { upsertBudget } from "@/lib/storage";
@@ -41,21 +42,21 @@ export function BudgetForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       <div>
-        <label style={{ display: "block", fontSize: "14px", marginBottom: "4px" }}>
+        <label className={styles.label}>
           対象月
         </label>
         <input
           type="month"
           value={yearMonth}
           onChange={(e) => setYearMonth(e.target.value)}
-          style={{ width: "100%", padding: "8px", fontSize: "16px" }}
+          className={styles.input}
         />
       </div>
 
       <div>
-        <label style={{ display: "block", fontSize: "14px", marginBottom: "4px" }}>
+        <label className={styles.label}>
           予算金額
         </label>
         <input
@@ -64,22 +65,15 @@ export function BudgetForm() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="例: 50000"
-          style={{ width: "100%", padding: "8px", fontSize: "16px" }}
+          className={styles.input}
         />
       </div>
 
-      {error && <p style={{ color: "#e24b4a", fontSize: "13px" }}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
       <button
         type="submit"
-        style={{
-          padding: "12px",
-          fontSize: "16px",
-          backgroundColor: "#639922",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-        }}
+        className={styles.submit}
       >
         保存する
       </button>

@@ -1,5 +1,5 @@
 import styles from "@/app/input/budget/budget.module.css";
-import { BudgetForm } from "@/components/organisms/BudgetForm";
+import { BudgetForm } from "@/components/organisms/BudgetForm/BudgetForm";
 
 export default function BudgetInputPage() {
   return (

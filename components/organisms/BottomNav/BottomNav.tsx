@@ -1,6 +1,7 @@
 
 "use client";
 
+import styles from "@/components/organisms/BottomNav/BottomNav.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,30 +16,14 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav
-      style={{
-        position: "sticky",
-        bottom: 0,
-        display: "flex",
-        borderTop: "1px solid #e0e0e0",
-        backgroundColor: "white",
-      }}
-    >
+    <nav className={styles.Nav}>
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Link
             key={item.href}
             href={item.href}
-            style={{
-              flex: 1,
-              textAlign: "center",
-              padding: "12px 0",
-              fontSize: "13px",
-              textDecoration: "none",
-              color: isActive ? "#378ADD" : "#666",
-              fontWeight: isActive ? 600 : 400,
-            }}
+            className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
           >
             {item.label}
           </Link>

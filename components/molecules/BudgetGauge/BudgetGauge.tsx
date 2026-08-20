@@ -1,3 +1,4 @@
+import styles from "@/components/molecules/BudgetGauge/BudgetGauge.module.css";
 
 type BudgetGaugeProps = {
   budgetAmount: number; // 予算金額
@@ -16,26 +17,16 @@ export function BudgetGauge({ budgetAmount, spentAmount }: BudgetGaugeProps) {
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <div
-        style={{
-          width: "100%",
-          height: "12px",
-          borderRadius: "6px",
-          backgroundColor: "#e5e5e5",
-          overflow: "hidden",
-        }}
-      >
-        <div
+    <div className={styles.frames}>
+      <div className={styles.track}>
+        <div className={styles.bar}
           style={{
-            width: `${percentage}%`,
-            height: "100%",
-            backgroundColor: getColor(),
-            transition: "width 0.3s ease, background-color 0.3s ease",
-          }}
+            "--percentage": `${percentage}%`,
+            "--bar-color": getColor(),
+          } as React.CSSProperties}
         />
       </div>
-      <p style={{ fontSize: "12px", marginTop: "4px", color: "#666" }}>
+      <p className={styles.font}>
         残り {remaining.toLocaleString()}円 / {budgetAmount.toLocaleString()}円
       </p>
     </div>

@@ -1,5 +1,5 @@
 
-import { BottomNav } from "@/components/organisms/BottomNav";
+import { BottomNav } from "@/components/organisms/BottomNav/BottomNav";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
