@@ -2,7 +2,6 @@
 export interface Category {
     id: string;
     userId: string;
-    parentCategoryId?: string;
     name: string;
     type: "expense" | "income";
     color: string;

@@ -25,6 +25,7 @@ export function getAppData(): AppData {
 }
 
 export function saveAppData(data: AppData): void {
+  if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
