@@ -25,6 +25,7 @@ export function getAppData(): AppData {
 }
 
 export function saveAppData(data: AppData): void {
+  if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -39,14 +40,6 @@ const defaultCategories: Category[] = [
   { id: "cat_housing",  userId: "local", name: "住居費",   type: "expense", color: "#5F5E5A" },
   { id: "cat_medical",  userId: "local", name: "医療費",   type: "expense", color: "#D85A30" },
   { id: "cat_other_exp",userId: "local", name: "その他",   type: "expense", color: "#888780" },
-
-  // ---- 支出：食費の小分類 ----
-  { id: "cat_food_veg",  userId: "local", name: "野菜",     type: "expense", color: "#97C459", parentCategoryId: "cat_food" },
-  { id: "cat_food_meat", userId: "local", name: "肉類",     type: "expense", color: "#3B6D11", parentCategoryId: "cat_food" },
-  { id: "cat_food_fish", userId: "local", name: "魚介類",   type: "expense", color: "#27500A", parentCategoryId: "cat_food" },
-  { id: "cat_food_processed", userId: "local", name: "加工食品", type: "expense", color: "#173404", parentCategoryId: "cat_food" },
-  { id: "cat_food_eatout", userId: "local", name: "外食",   type: "expense", color: "#C0DD97", parentCategoryId: "cat_food" },
-
   // ---- 収入 ----
   { id: "cat_salary",   userId: "local", name: "給与",     type: "income", color: "#0F6E56" },
   { id: "cat_other_inc",userId: "local", name: "その他収入", type: "income", color: "#5DCAA5" },
@@ -95,6 +88,24 @@ export function getBudgets(): Budget[] {
 export function addBudget(budget: Budget): void {
   const data = getAppData();
   data.budgets.push(budget);
+  saveAppData(data);
+}
+
+export function upsertBudget(budget: Budget): void {
+  const data = getAppData();
+  const existingIndex = data.budgets.findIndex(
+    (b) =>
+      b.periodType === budget.periodType &&
+      b.periodKey === budget.periodKey &&
+      b.categoryId === budget.categoryId // 全体予算同士は categoryId が両方 undefined で一致する
+  );
+
+  if (existingIndex !== -1) {
+    data.budgets[existingIndex] = budget; // 既存を上書き
+  } else {
+    data.budgets.push(budget); // 新規追加
+  }
+
   saveAppData(data);
 }
 

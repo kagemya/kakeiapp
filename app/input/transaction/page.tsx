@@ -1,11 +1,11 @@
-
+import styles from "@/app/input/transaction/transaction.module.css";
 import { TransactionForm } from "@/components/organisms/TransactionForm";
 
 export default function TransactionInputPage() {
   return (
-    <main style={{ padding: "16px" }}>
-      <h1 style={{ fontSize: "20px", marginBottom: "16px" }}>支出・収入を記録</h1>
+    <div className={styles.form}>
+      <h1 className={styles.guide}>支出・収入を記録</h1>
       <TransactionForm />
-    </main>
+    </div>
   );
 }
