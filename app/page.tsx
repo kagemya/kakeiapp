@@ -38,9 +38,7 @@ export default function HomePage() {
   );
   const spentAmount = currentMonthTransactions.reduce((sum, t) => sum + t.amount, 0);
 
-  const pieData = aggregateByCategory(currentMonthTransactions, categories, {
-    topLevelOnly: true,
-  });
+  const pieData = aggregateByCategory(currentMonthTransactions, categories);
 
   return (
     <main style={{ padding: "16px" }}>

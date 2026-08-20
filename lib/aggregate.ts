@@ -18,29 +18,15 @@ export type AggregatedItem = {
 export function aggregateByCategory(
   transactions: Transaction[],
   categories: Category[],
-  options: { topLevelOnly: boolean }
 ): AggregatedItem[] {
-  const { topLevelOnly } = options;
+  const totals = new Map<string, number>();
 
   // カテゴリIDから「集計に使うカテゴリ」を引けるようにする
-  // topLevelOnly=true の場合、小分類は親（大分類）に読み替える
-  const resolveCategory = (categoryId: string): Category | undefined => {
-    const category = categories.find((c) => c.id === categoryId);
-    if (!category) return undefined;
-    if (topLevelOnly && category.parentCategoryId) {
-      return categories.find((c) => c.id === category.parentCategoryId);
-    }
-    return category;
-  };
-
-  const totals = new Map<string, number>();
 
   for (const transaction of transactions) {
     if (transaction.type !== "expense") continue; // 支出のみ集計
-    const category = resolveCategory(transaction.categoryId);
-    if (!category) continue;
-    const current = totals.get(category.id) ?? 0;
-    totals.set(category.id, current + transaction.amount);
+    const current = totals.get(transaction.categoryId) ?? 0;
+    totals.set(transaction.categoryId, current + transaction.amount);
   }
 
   return Array.from(totals.entries())
@@ -48,9 +34,9 @@ export function aggregateByCategory(
       const category = categories.find((c) => c.id === categoryId)!;
       return {
         categoryId,
-        categoryName: category.name,
+        categoryName: category?.name ?? "不明",
         amount,
-        color: category.color,
+        color: category?.color ?? "#ccc",
       };
     })
     .sort((a, b) => b.amount - a.amount); // 金額が大きい順
