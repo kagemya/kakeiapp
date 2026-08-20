@@ -1,0 +1,28 @@
+
+.Nav {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    border-top: 1px solid #e0e0e0;
+    background-color: white;
+}
+
+.link {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 400;
+}
+
+.linkActive {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #378ADD;
+    font-weight: 600;
+}

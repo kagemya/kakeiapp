@@ -2,8 +2,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BudgetGauge } from "@/components/molecules/BudgetGauge";
-import { ExpensePieChart } from "@/components/organisms/ExpensePieChart";
+import { BudgetGauge } from "@/components/molecules/BudgetGauge/BudgetGauge";
+import { ExpensePieChart } from "@/components/organisms/ExpensePieChart/ExpensePieChart";
 import { aggregateByCategory } from "@/lib/aggregate";
 import { getCategories, getTransactions, getBudgets } from "@/lib/storage";
 import { Category, Transaction, Budget } from "@/types";

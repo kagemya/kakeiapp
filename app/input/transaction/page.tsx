@@ -1,5 +1,5 @@
 import styles from "@/app/input/transaction/transaction.module.css";
-import { TransactionForm } from "@/components/organisms/TransactionForm";
+import { TransactionForm } from "@/components/organisms/TransactionForm/TransactionForm";
 
 export default function TransactionInputPage() {
   return (
